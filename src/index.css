@@ -214,3 +214,45 @@ input {
 .download-btn:hover {
   background: #15803d;
 }
+
+.download-btn:disabled {
+  background: #86efac;
+  cursor: not-allowed;
+}
+
+.save-btn {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background: #1d4ed8;
+}
+
+.save-btn:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.save-status {
+  margin: 0.6rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.save-status.success {
+  color: #16a34a;
+}
+
+.save-status.error {
+  color: #b91c1c;
+}

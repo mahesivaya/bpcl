@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import { client } from './amplifyClient.js'
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -21,22 +22,18 @@ const pad2 = (n) => String(n).padStart(2, '0')
 const formatDate = (year, monthIndex, day) =>
   `${year}-${pad2(monthIndex + 1)}-${pad2(day)}`
 
-// Deterministic pseudo-random generator seeded by the date, so the
-// same date always downloads the same sample values.
-const mulberry32 = (seed) => () => {
-  let t = (seed += 0x6d2b79f5)
-  t = Math.imul(t ^ (t >>> 15), t | 1)
-  t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
-  return ((t ^ (t >>> 14)) >>> 0) / 4294967296
-}
+const fetchRowForDate = async (year, monthIndex, day) => {
+  const date = formatDate(year, monthIndex, day)
+  const { data: record } = await client.models.DailyReport.get({ date })
 
-const sampleForDate = (year, monthIndex, day) => {
-  const seed = year * 10000 + (monthIndex + 1) * 100 + day
-  const rand = mulberry32(seed)
-  const money = Math.round(5000 + rand() * 45000)
-  const kl = Math.round(100 + rand() * 900)
-  const tankers = 1 + Math.floor(rand() * 6)
-  return { date: formatDate(year, monthIndex, day), money, kl, tankers }
+  if (!record) {
+    return { date, money: 0, kl: 0, tankers: 0 }
+  }
+
+  const money = (record.moneyNineAM || 0) + (record.moneyTwelvePM || 0)
+  const kl = (record.currentKL || 0) + (record.newTankerKL || 0)
+  const tankers = record.tankers ? record.tankers.length : 0
+  return { date, money, kl, tankers }
 }
 
 const downloadPDF = (filename, title, rows, includeTotal) => {
@@ -127,6 +124,7 @@ function DateSelect({ year, monthIndex, day, onChange }) {
 function ReportDownload() {
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState('single')
+  const [downloading, setDownloading] = useState(false)
 
   const today = new Date()
   const [single, setSingle] = useState({
@@ -145,35 +143,42 @@ function ReportDownload() {
     day: today.getDate(),
   })
 
-  const handleDownload = () => {
-    if (mode === 'single') {
-      const row = sampleForDate(single.year, single.monthIndex, single.day)
-      downloadPDF(`daily-report-${row.date}.pdf`, `Daily Report - ${row.date}`, [row], false)
-      return
+  const handleDownload = async () => {
+    setDownloading(true)
+    try {
+      if (mode === 'single') {
+        const row = await fetchRowForDate(single.year, single.monthIndex, single.day)
+        downloadPDF(`daily-report-${row.date}.pdf`, `Daily Report - ${row.date}`, [row], false)
+        return
+      }
+
+      const startDate = new Date(start.year, start.monthIndex, start.day)
+      const endDate = new Date(end.year, end.monthIndex, end.day)
+
+      if (startDate > endDate) {
+        window.alert('Start date must be on or before end date.')
+        return
+      }
+
+      const rows = []
+      const cursor = new Date(startDate)
+      while (cursor <= endDate) {
+        rows.push(await fetchRowForDate(cursor.getFullYear(), cursor.getMonth(), cursor.getDate()))
+        cursor.setDate(cursor.getDate() + 1)
+      }
+
+      const rangeLabel = `${rows[0].date} to ${rows[rows.length - 1].date}`
+      downloadPDF(
+        `report-${rows[0].date}_to_${rows[rows.length - 1].date}.pdf`,
+        `Range Report - ${rangeLabel}`,
+        rows,
+        true,
+      )
+    } catch {
+      window.alert('Could not fetch report data. Please try again.')
+    } finally {
+      setDownloading(false)
     }
-
-    const startDate = new Date(start.year, start.monthIndex, start.day)
-    const endDate = new Date(end.year, end.monthIndex, end.day)
-
-    if (startDate > endDate) {
-      window.alert('Start date must be on or before end date.')
-      return
-    }
-
-    const rows = []
-    const cursor = new Date(startDate)
-    while (cursor <= endDate) {
-      rows.push(sampleForDate(cursor.getFullYear(), cursor.getMonth(), cursor.getDate()))
-      cursor.setDate(cursor.getDate() + 1)
-    }
-
-    const rangeLabel = `${rows[0].date} to ${rows[rows.length - 1].date}`
-    downloadPDF(
-      `report-${rows[0].date}_to_${rows[rows.length - 1].date}.pdf`,
-      `Range Report - ${rangeLabel}`,
-      rows,
-      true,
-    )
   }
 
   return (
@@ -218,8 +223,13 @@ function ReportDownload() {
             </>
           )}
 
-          <button type="button" className="download-btn" onClick={handleDownload}>
-            ⬇ Download PDF
+          <button
+            type="button"
+            className="download-btn"
+            onClick={handleDownload}
+            disabled={downloading}
+          >
+            {downloading ? 'Fetching...' : '⬇ Download PDF'}
           </button>
         </div>
       )}

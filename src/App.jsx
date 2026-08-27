@@ -1,9 +1,17 @@
 import { useEffect, useState } from 'react'
 import ReportDownload from './ReportDownload.jsx'
+import { client } from './amplifyClient.js'
 
 const toNumber = (value) => {
   const num = parseFloat(value)
   return Number.isNaN(num) ? 0 : num
+}
+
+const pad2 = (n) => String(n).padStart(2, '0')
+
+const todayISO = () => {
+  const d = new Date()
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`
 }
 
 function App() {
@@ -16,6 +24,7 @@ function App() {
   const [newTankerKL, setNewTankerKL] = useState('')
 
   const [tankers, setTankers] = useState([''])
+  const [saveStatus, setSaveStatus] = useState('idle')
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000)
@@ -31,6 +40,34 @@ function App() {
 
   const handleAddTanker = () => {
     setTankers((prev) => [...prev, ''])
+  }
+
+  const handleSave = async () => {
+    setSaveStatus('saving')
+    const date = todayISO()
+    const record = {
+      date,
+      moneyNineAM: toNumber(moneyNineAM),
+      moneyTwelvePM: toNumber(moneyTwelvePM),
+      currentKL: toNumber(currentKL),
+      newTankerKL: toNumber(newTankerKL),
+      tankers: tankers.map(toNumber),
+    }
+
+    try {
+      const { data: existing } = await client.models.DailyReport.get({ date })
+      const { errors } = existing
+        ? await client.models.DailyReport.update(record)
+        : await client.models.DailyReport.create(record)
+
+      if (errors) {
+        setSaveStatus('error')
+        return
+      }
+      setSaveStatus('saved')
+    } catch {
+      setSaveStatus('error')
+    }
   }
 
   const dateStr = now.toLocaleDateString(undefined, {
@@ -129,6 +166,19 @@ function App() {
           </label>
         ))}
       </section>
+
+      <button
+        type="button"
+        className="save-btn"
+        onClick={handleSave}
+        disabled={saveStatus === 'saving'}
+      >
+        {saveStatus === 'saving' ? 'Saving...' : "Save Today's Report"}
+      </button>
+      {saveStatus === 'saved' && <p className="save-status success">Saved.</p>}
+      {saveStatus === 'error' && (
+        <p className="save-status error">Could not save. Please try again.</p>
+      )}
     </div>
   )
 }
