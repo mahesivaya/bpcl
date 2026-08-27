@@ -27,16 +27,55 @@ h1 {
   font-size: 1.6rem;
 }
 
-.subtitle {
-  margin: 0 0 1.25rem;
+.datetime {
+  margin: 0 0 1.5rem;
   color: #6b7280;
+  font-size: 0.9rem;
 }
 
-form {
+.section {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 0.85rem;
+  text-align: left;
+  padding: 1rem 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.section h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-btn:hover {
+  background: #1d4ed8;
 }
 
 label {
@@ -56,49 +95,122 @@ input {
   border-radius: 6px;
 }
 
-.plus {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #4b5563;
+.input-unit {
+  position: relative;
+  display: flex;
 }
 
-.actions {
+.input-unit input {
+  padding-right: 2.75rem;
+}
+
+.input-unit .unit {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.total {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.calendar-wrap {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-btn {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f9fafb;
+  color: #111827;
+  cursor: pointer;
+}
+
+.calendar-btn:hover {
+  background: #f3f4f6;
+}
+
+.calendar-panel {
+  margin-top: 0.6rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fafafa;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mode-toggle {
   display: flex;
   gap: 0.5rem;
-  margin-top: 0.25rem;
 }
 
-button {
+.mode-toggle button {
   flex: 1;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+}
+
+.mode-toggle button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.range-label {
+  margin: 0.2rem 0 -0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.date-selects {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.date-selects select {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.4rem;
+  font-size: 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+}
+
+.download-btn {
   padding: 0.6rem 1rem;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   border: none;
   border-radius: 6px;
-  background: #2563eb;
+  background: #16a34a;
   color: white;
   cursor: pointer;
 }
 
-button:hover {
-  background: #1d4ed8;
-}
-
-button.secondary {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-button.secondary:hover {
-  background: #d1d5db;
-}
-
-.error {
-  margin-top: 1rem;
-  color: #b91c1c;
-}
-
-.result {
-  margin-top: 1.25rem;
-  font-size: 1.35rem;
-  font-weight: 600;
+.download-btn:hover {
+  background: #15803d;
 }
