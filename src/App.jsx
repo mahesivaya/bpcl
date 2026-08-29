@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import AddUser from './AddUser.jsx'
 import ReportDownload from './ReportDownload.jsx'
 import { client } from './amplifyClient.js'
 
@@ -14,7 +15,7 @@ const todayISO = () => {
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`
 }
 
-function App() {
+function App({ signOut, user }) {
   const [now, setNow] = useState(new Date())
 
   const [moneyNineAM, setMoneyNineAM] = useState('')
@@ -24,6 +25,11 @@ function App() {
   const [newTankerKL, setNewTankerKL] = useState('')
 
   const [tankers, setTankers] = useState([''])
+
+  const [saleKL, setSaleKL] = useState('')
+  const [ratePerLiter, setRatePerLiter] = useState('')
+  const [mobilePayment, setMobilePayment] = useState('')
+  const [cashPayment, setCashPayment] = useState('')
   const [saveStatus, setSaveStatus] = useState('idle')
 
   useEffect(() => {
@@ -33,6 +39,8 @@ function App() {
 
   const totalMoney = toNumber(moneyNineAM) + toNumber(moneyTwelvePM)
   const totalKL = toNumber(currentKL) + toNumber(newTankerKL)
+  const totalSaleAmount = toNumber(saleKL) * toNumber(ratePerLiter)
+  const totalPayment = toNumber(mobilePayment) + toNumber(cashPayment)
 
   const handleTankerChange = (index, value) => {
     setTankers((prev) => prev.map((t, i) => (i === index ? value : t)))
@@ -52,6 +60,10 @@ function App() {
       currentKL: toNumber(currentKL),
       newTankerKL: toNumber(newTankerKL),
       tankers: tankers.map(toNumber),
+      saleKL: toNumber(saleKL),
+      ratePerLiter: toNumber(ratePerLiter),
+      mobilePayment: toNumber(mobilePayment),
+      cashPayment: toNumber(cashPayment),
     }
 
     try {
@@ -80,17 +92,27 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Daily Report</h1>
-      <p className="datetime">
-        {dateStr} &middot; {timeStr}
-      </p>
+      <header className="page-header">
+        <div className="header-account">
+          <span>{user?.signInDetails?.loginId}</span>
+          <AddUser />
+          <button type="button" className="signout-btn" onClick={signOut}>
+            Sign out
+          </button>
+        </div>
+        <h1>Past Reports</h1>
+        <p className="datetime">
+          {dateStr} &middot; {timeStr}
+        </p>
+      </header>
 
       <ReportDownload />
 
+      <div className="form-grid">
       <section className="section">
-        <h2>Money</h2>
+        <h2>Amount</h2>
         <label>
-          9AM Money
+          9:00 AM
           <input
             type="text"
             inputMode="decimal"
@@ -100,7 +122,7 @@ function App() {
           />
         </label>
         <label>
-          12PM Money
+          12:00 PM
           <input
             type="text"
             inputMode="decimal"
@@ -144,6 +166,68 @@ function App() {
       </section>
 
       <section className="section">
+        <h2>Sale</h2>
+        <label>
+          KL
+          <div className="input-unit">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={saleKL}
+              onChange={(e) => setSaleKL(e.target.value)}
+              placeholder="0"
+            />
+            <span className="unit">KL</span>
+          </div>
+        </label>
+        <label>
+          Amount per /L
+          <div className="input-unit">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={ratePerLiter}
+              onChange={(e) => setRatePerLiter(e.target.value)}
+              placeholder="0"
+            />
+            <span className="unit">₹/L</span>
+          </div>
+        </label>
+        <p className="total">Total Amount: {totalSaleAmount}</p>
+      </section>
+
+      <section className="section">
+        <h2>Payment</h2>
+        <label>
+          Mobile Payment Amount
+          <div className="input-unit">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={mobilePayment}
+              onChange={(e) => setMobilePayment(e.target.value)}
+              placeholder="0"
+            />
+            <span className="unit">₹</span>
+          </div>
+        </label>
+        <label>
+          Cash Payment Amount
+          <div className="input-unit">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={cashPayment}
+              onChange={(e) => setCashPayment(e.target.value)}
+              placeholder="0"
+            />
+            <span className="unit">₹</span>
+          </div>
+        </label>
+        <p className="total">Total Amount: {totalPayment}</p>
+      </section>
+
+      <section className="section">
         <div className="section-header">
           <h2>Total Tankers</h2>
           <button type="button" className="add-btn" onClick={handleAddTanker}>
@@ -166,19 +250,22 @@ function App() {
           </label>
         ))}
       </section>
+      </div>
 
-      <button
-        type="button"
-        className="save-btn"
-        onClick={handleSave}
-        disabled={saveStatus === 'saving'}
-      >
-        {saveStatus === 'saving' ? 'Saving...' : "Save Today's Report"}
-      </button>
-      {saveStatus === 'saved' && <p className="save-status success">Saved.</p>}
-      {saveStatus === 'error' && (
-        <p className="save-status error">Could not save. Please try again.</p>
-      )}
+      <div className="save-actions">
+        <button
+          type="button"
+          className="save-btn"
+          onClick={handleSave}
+          disabled={saveStatus === 'saving'}
+        >
+          {saveStatus === 'saving' ? 'Saving...' : "Save Today's Report"}
+        </button>
+        {saveStatus === 'saved' && <p className="save-status success">Saved.</p>}
+        {saveStatus === 'error' && (
+          <p className="save-status error">Could not save. Please try again.</p>
+        )}
+      </div>
     </div>
   )
 }
