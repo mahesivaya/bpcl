@@ -30,7 +30,9 @@ const fetchRowForDate = async (year, monthIndex, day) => {
     return { date, money: 0, kl: 0, tankers: 0 }
   }
 
-  const money = (record.moneyNineAM || 0) + (record.moneyTwelvePM || 0)
+  const money =
+    ((record.hsdNozzle1Closing || 0) - (record.hsdNozzle1Opening || 0)) +
+    ((record.hsdNozzle2Closing || 0) - (record.hsdNozzle2Opening || 0))
   const kl = (record.currentKL || 0) + (record.newTankerKL || 0)
   const tankers = record.tankers ? record.tankers.length : 0
   return { date, money, kl, tankers }

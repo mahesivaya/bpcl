@@ -6,7 +6,7 @@ body {
   display: block;
   min-height: 100vh;
   margin: 0;
-  padding: 2rem;
+  padding: 0;
   font-family: system-ui, sans-serif;
   background: #f2f4f7;
   color: #111827;
@@ -15,16 +15,42 @@ body {
 .container {
   background: white;
   padding: 2rem 3rem 3rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: left;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
 }
 
 .page-header {
   text-align: center;
+  background: #2563eb;
+  color: white;
+  margin: -2rem -3rem 1.5rem;
+  padding: 1.5rem 3rem;
+}
+
+.page-header .datetime {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.page-header .header-account {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  text-align: left;
 }
 
 .header-account {
@@ -32,7 +58,6 @@ body {
   align-items: center;
   justify-content: flex-end;
   gap: 0.75rem;
-  margin-bottom: 0.5rem;
   font-size: 0.85rem;
   color: #6b7280;
 }
@@ -94,14 +119,14 @@ h1 {
 }
 
 .datetime {
-  margin: 0 0 1.5rem;
+  margin: 0;
   color: #6b7280;
   font-size: 0.9rem;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -112,15 +137,32 @@ h1 {
   align-items: stretch;
   gap: 0.85rem;
   text-align: left;
-  padding: 1.25rem;
+  padding: 0.5rem;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   background: #fafafa;
+  max-width: 340px;
+}
+
+.section-wide {
+  grid-column: span 2;
+  max-width: none;
+}
+
+.denom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem 1.5rem;
 }
 
 .section h2 {
   margin: 0;
   font-size: 1.05rem;
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: #2563eb;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
 }
 
 .section-header {
@@ -159,10 +201,23 @@ label {
 
 input {
   width: 100%;
-  padding: 0.6rem 0.75rem;
-  font-size: 1rem;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.85rem;
   border: 1px solid #d1d5db;
   border-radius: 6px;
+}
+
+.section label {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  white-space: nowrap;
+}
+
+.section label input,
+.section label .input-unit {
+  flex: 0 1 110px;
+  min-width: 0;
 }
 
 .input-unit {
@@ -185,6 +240,44 @@ input {
   pointer-events: none;
 }
 
+.denom-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.denom-row label {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.denom-value {
+  min-width: 0;
+  text-align: right;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.xy-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+}
+
+.xy-row label {
+  flex: 0 0 auto;
+  min-width: 0;
+  gap: 0.3rem;
+}
+
+.xy-sep {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111827;
+}
+
 .total {
   margin: 0;
   font-size: 1.1rem;
@@ -192,10 +285,24 @@ input {
   color: #2563eb;
 }
 
+.total-divider {
+  padding-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.total.positive {
+  color: #16a34a;
+}
+
+.total.negative {
+  color: #dc2626;
+}
+
 .calendar-wrap {
   position: relative;
-  margin: 0 auto 1.5rem;
-  max-width: 480px;
+  margin: 0;
+  width: 260px;
+  max-width: 60vw;
 }
 
 .calendar-btn {
@@ -292,28 +399,32 @@ input {
 }
 
 .save-actions {
-  max-width: 320px;
-  margin: 1.5rem auto 0;
+  text-align: center;
+  background: #1e3a8a;
+  margin: 1.5rem -3rem -3rem;
+  padding: 1.5rem 3rem;
 }
 
 .save-btn {
   width: 100%;
+  max-width: 320px;
   padding: 0.7rem 1rem;
   font-size: 1rem;
   font-weight: 600;
   border: none;
   border-radius: 6px;
-  background: #2563eb;
-  color: white;
+  background: white;
+  color: #1e3a8a;
   cursor: pointer;
 }
 
 .save-btn:hover {
-  background: #1d4ed8;
+  background: #dbeafe;
 }
 
 .save-btn:disabled {
   background: #93c5fd;
+  color: #1e3a8a;
   cursor: not-allowed;
 }
 
@@ -339,7 +450,16 @@ input {
 
   .container {
     padding: 1.25rem 1rem 1.5rem;
-    border-radius: 10px;
+  }
+
+  .page-header {
+    margin: -1.25rem -1rem 1.25rem;
+    padding: 1.25rem 1rem;
+  }
+
+  .save-actions {
+    margin: 1.5rem -1rem -1.5rem;
+    padding: 1.25rem 1rem;
   }
 
   h1 {
@@ -351,11 +471,21 @@ input {
     gap: 1rem;
   }
 
-  .calendar-wrap {
-    max-width: 100%;
+  .section-wide {
+    grid-column: span 1;
   }
 
-  .save-actions {
+  .denom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .calendar-wrap {
+    width: 100%;
     max-width: 100%;
   }
 
