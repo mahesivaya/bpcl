@@ -162,10 +162,10 @@ function App({ signOut, user }) {
 
       <div className="form-grid">
       <section className="section">
-        <h2>HSD</h2>
+        <h2>Diesel Meter</h2>
         <div className="xy-row">
           <label>
-            X
+            Start
             <input
               type="text"
               inputMode="decimal"
@@ -174,9 +174,8 @@ function App({ signOut, user }) {
               placeholder="0"
             />
           </label>
-          <span className="xy-sep">-</span>
           <label>
-            Y
+            End
             <input
               type="text"
               inputMode="decimal"
@@ -186,10 +185,10 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Amount: {fmt(hsdAmount1)}</p>
+        <p className="total">Volume: {fmt(hsdAmount1)}</p>
         <div className="xy-row">
           <label>
-            X
+            Start
             <input
               type="text"
               inputMode="decimal"
@@ -198,9 +197,8 @@ function App({ signOut, user }) {
               placeholder="0"
             />
           </label>
-          <span className="xy-sep">-</span>
           <label>
-            Y
+            End
             <input
               type="text"
               inputMode="decimal"
@@ -210,15 +208,15 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Amount: {fmt(hsdAmount2)}</p>
-        <p className="total total-divider">HSD Total: {fmt(totalHSD)}</p>
+        <p className="total">Volume: {fmt(hsdAmount2)}</p>
+        <p className="total total-divider">Total Diesel: {fmt(totalHSD)}</p>
       </section>
 
       <section className="section">
-        <h2>MS</h2>
+        <h2>Petrol Meter</h2>
         <div className="xy-row">
           <label>
-            X
+            Start
             <input
               type="text"
               inputMode="decimal"
@@ -227,9 +225,8 @@ function App({ signOut, user }) {
               placeholder="0"
             />
           </label>
-          <span className="xy-sep">-</span>
           <label>
-            Y
+            End
             <input
               type="text"
               inputMode="decimal"
@@ -239,10 +236,10 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Amount: {fmt(msAmount1)}</p>
+        <p className="total">Volume: {fmt(msAmount1)}</p>
         <div className="xy-row">
           <label>
-            X
+            Start
             <input
               type="text"
               inputMode="decimal"
@@ -251,9 +248,8 @@ function App({ signOut, user }) {
               placeholder="0"
             />
           </label>
-          <span className="xy-sep">-</span>
           <label>
-            Y
+            End
             <input
               type="text"
               inputMode="decimal"
@@ -263,14 +259,14 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Amount: {fmt(msAmount2)}</p>
-        <p className="total total-divider">MS Total: {fmt(totalMS)}</p>
+        <p className="total">Volume: {fmt(msAmount2)}</p>
+        <p className="total total-divider">Total Petrol: {fmt(totalMS)}</p>
       </section>
 
       <section className="section">
         <h2>Final Collection</h2>
         <label>
-          <span className="denom-label">HSD</span>
+          <span className="denom-label">Diesel price</span>
           <div className="input-unit">
             <input
               type="text"
@@ -282,9 +278,9 @@ function App({ signOut, user }) {
             <span className="unit">₹/L</span>
           </div>
         </label>
-        <p className="total">HSD Amount: {fmt(hsdFinalAmount)}</p>
+        <p className="total">Diesel Amount: {fmt(hsdFinalAmount)}</p>
         <label>
-          <span className="denom-label">MS</span>
+          <span className="denom-label">Petrol price</span>
           <div className="input-unit">
             <input
               type="text"
@@ -296,8 +292,8 @@ function App({ signOut, user }) {
             <span className="unit">₹/L</span>
           </div>
         </label>
-        <p className="total">MS Amount: {fmt(msFinalAmount)}</p>
-        <p className="total">Final HSD+MS = {fmt(totalCollection)}</p>
+        <p className="total">Petrol Amount: {fmt(msFinalAmount)}</p>
+        <p className="total total-divider">Diesel+Petrol Amount = {fmt(totalCollection)}</p>
       </section>
 
       <section className="section">
@@ -325,7 +321,8 @@ function App({ signOut, user }) {
             placeholder="0"
           />
         </label>
-        <p className="total">2TT Amount: {fmt(ttAmount)}</p>
+        <p className="total total-divider">2TT Amount: {fmt(ttAmount)}</p>
+        <p className="total total-divider">Final balance: {fmt(finalBalance)}</p>
       </section>
 
       <section className="section">
@@ -356,8 +353,7 @@ function App({ signOut, user }) {
             <span className="unit">₹</span>
           </div>
         </label>
-        <p className="total">Total payments: {fmt(totalPayments)}</p>
-        <p className="total">Final balance: {fmt(finalBalance)}</p>
+        <p className="total">Online payments: {fmt(totalPayments)}</p>
       </section>
 
       <section className="section section-wide">

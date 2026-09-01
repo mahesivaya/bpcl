@@ -60,49 +60,49 @@ export const buildDailyReportPDF = (record) => {
     y = doc.lastAutoTable.finalY + 4
   }
 
-  section('HSD', [
+  section('Diesel Meter', [
     [
-      'Nozzle 1: X - Y',
+      'Nozzle 1: Start - End',
       `${fmt(n(record.hsdNozzle1Closing))} - ${fmt(n(record.hsdNozzle1Opening))} = ${fmt(hsdAmount1)}`,
     ],
     [
-      'Nozzle 2: X - Y',
+      'Nozzle 2: Start - End',
       `${fmt(n(record.hsdNozzle2Closing))} - ${fmt(n(record.hsdNozzle2Opening))} = ${fmt(hsdAmount2)}`,
     ],
-    ['HSD Total', fmt(totalHSD)],
+    ['Total Diesel', fmt(totalHSD)],
   ])
 
-  section('MS', [
+  section('Petrol Meter', [
     [
-      'Nozzle 1: X - Y',
+      'Nozzle 1: Start - End',
       `${fmt(n(record.msNozzle1Closing))} - ${fmt(n(record.msNozzle1Opening))} = ${fmt(msAmount1)}`,
     ],
     [
-      'Nozzle 2: X - Y',
+      'Nozzle 2: Start - End',
       `${fmt(n(record.msNozzle2Closing))} - ${fmt(n(record.msNozzle2Opening))} = ${fmt(msAmount2)}`,
     ],
-    ['MS Total', fmt(totalMS)],
+    ['Total Petrol', fmt(totalMS)],
   ])
 
   section('Final Collection', [
-    ['HSD Rate', fmt(n(record.hsdRate))],
-    ['HSD Amount', fmt(hsdFinalAmount)],
-    ['MS Rate', fmt(n(record.msRate))],
-    ['MS Amount', fmt(msFinalAmount)],
-    ['Final HSD+MS', fmt(totalCollection)],
+    ['Diesel Price', fmt(n(record.hsdRate))],
+    ['Diesel Amount', fmt(hsdFinalAmount)],
+    ['Petrol Price', fmt(n(record.msRate))],
+    ['Petrol Amount', fmt(msFinalAmount)],
+    ['Diesel+Petrol Amount', fmt(totalCollection)],
   ])
 
   section('2TT', [
     ['2TT Price', fmt(n(record.ttPrice))],
     ['2TT Sold', fmt(n(record.ttSold))],
     ['2TT Amount', fmt(ttAmount)],
+    ['Final Balance', fmt(finalBalance)],
   ])
 
   section('Payment', [
     ['Phone Pay', fmt(n(record.phonePay))],
     ['Card Pay', fmt(n(record.cardPay))],
-    ['Total Payments', fmt(totalPayments)],
-    ['Final Balance', fmt(finalBalance)],
+    ['Online Payments', fmt(totalPayments)],
   ])
 
   section('Denomination', [
