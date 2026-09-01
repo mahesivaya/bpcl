@@ -444,6 +444,11 @@ input {
 }
 
 @media (max-width: 640px) {
+  input,
+  select {
+    font-size: 16px;
+  }
+
   body {
     padding: 0.75rem;
   }
@@ -494,7 +499,7 @@ input {
   }
 
   .date-selects select {
-    font-size: 0.8rem;
+    font-size: 16px;
     padding: 0.5rem 0.3rem;
   }
 
