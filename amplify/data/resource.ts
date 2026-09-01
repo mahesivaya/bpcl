@@ -26,6 +26,7 @@ const schema = a.schema({
       note20: a.float(),
       note10: a.float(),
       coins: a.float(),
+      comment: a.string(),
     })
     .identifier(['date'])
     .authorization((allow) => [allow.authenticated()]),

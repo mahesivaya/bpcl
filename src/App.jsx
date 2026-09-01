@@ -55,31 +55,34 @@ function App({ signOut, user }) {
   const [note10, setNote10] = useState('')
   const [coins, setCoins] = useState('')
 
+  const [comment, setComment] = useState('')
+
   const [saveStatus, setSaveStatus] = useState('idle')
 
-  const hsdAmount1 = trunc2(toNumber(hsdNozzle1Closing) - toNumber(hsdNozzle1Opening))
-  const hsdAmount2 = trunc2(toNumber(hsdNozzle2Closing) - toNumber(hsdNozzle2Opening))
-  const totalHSD = trunc2(hsdAmount1 + hsdAmount2)
-  const msAmount1 = trunc2(toNumber(msNozzle1Closing) - toNumber(msNozzle1Opening))
-  const msAmount2 = trunc2(toNumber(msNozzle2Closing) - toNumber(msNozzle2Opening))
-  const totalMS = trunc2(msAmount1 + msAmount2)
-  const hsdFinalAmount = trunc2(totalHSD * toNumber(hsdRate))
-  const msFinalAmount = trunc2(totalMS * toNumber(msRate))
-  const totalCollection = trunc2(hsdFinalAmount + msFinalAmount)
-  const totalPayments = trunc2(toNumber(phonePay) + toNumber(cardPay))
-  const ttAmount = trunc2(toNumber(ttPrice) * toNumber(ttSold))
-  const finalTotal = trunc2(totalPayments + ttAmount)
+  const hsdAmount1 = toNumber(hsdNozzle1Closing) - toNumber(hsdNozzle1Opening)
+  const hsdAmount2 = toNumber(hsdNozzle2Closing) - toNumber(hsdNozzle2Opening)
+  const totalHSD = hsdAmount1 + hsdAmount2
+  const msAmount1 = toNumber(msNozzle1Closing) - toNumber(msNozzle1Opening)
+  const msAmount2 = toNumber(msNozzle2Closing) - toNumber(msNozzle2Opening)
+  const totalMS = msAmount1 + msAmount2
+  const hsdFinalAmount = Math.abs(totalHSD) * toNumber(hsdRate)
+  const msFinalAmount = Math.abs(totalMS) * toNumber(msRate)
+  const totalCollection = hsdFinalAmount + msFinalAmount
+  const totalPayments = toNumber(phonePay) + toNumber(cardPay)
+  const finalBalance = totalCollection - totalPayments
+  const ttAmount = toNumber(ttPrice) * toNumber(ttSold)
 
-  const value500 = trunc2(500 * toNumber(note500))
-  const value200 = trunc2(200 * toNumber(note200))
-  const value100 = trunc2(100 * toNumber(note100))
-  const value50 = trunc2(50 * toNumber(note50))
-  const value20 = trunc2(20 * toNumber(note20))
-  const value10 = trunc2(10 * toNumber(note10))
-  const valueCoins = trunc2(toNumber(coins))
-  const totalCash = trunc2(
+  const value500 = 500 * toNumber(note500)
+  const value200 = 200 * toNumber(note200)
+  const value100 = 100 * toNumber(note100)
+  const value50 = 50 * toNumber(note50)
+  const value20 = 20 * toNumber(note20)
+  const value10 = 10 * toNumber(note10)
+  const valueCoins = toNumber(coins)
+  const totalCash =
     value500 + value200 + value100 + value50 + value20 + value10 + valueCoins
-  )
+
+  const finalTotal = finalBalance - totalCash
 
   const handleSave = async () => {
     setSaveStatus('saving')
@@ -107,6 +110,7 @@ function App({ signOut, user }) {
       note20: toNumber(note20),
       note10: toNumber(note10),
       coins: toNumber(coins),
+      comment,
     }
 
     try {
@@ -295,37 +299,6 @@ function App({ signOut, user }) {
       </section>
 
       <section className="section">
-        <h2>Payment</h2>
-        <label>
-          Phone Pay
-          <div className="input-unit">
-            <input
-              type="text"
-              inputMode="decimal"
-              value={phonePay}
-              onChange={(e) => setPhonePay(e.target.value)}
-              placeholder="0"
-            />
-            <span className="unit">₹</span>
-          </div>
-        </label>
-        <label>
-          Card Pay
-          <div className="input-unit">
-            <input
-              type="text"
-              inputMode="decimal"
-              value={cardPay}
-              onChange={(e) => setCardPay(e.target.value)}
-              placeholder="0"
-            />
-            <span className="unit">₹</span>
-          </div>
-        </label>
-        <p className="total">Total payments: {fmt(totalPayments)}</p>
-      </section>
-
-      <section className="section">
         <h2>2TT</h2>
         <label>
           2TT price
@@ -354,10 +327,35 @@ function App({ signOut, user }) {
       </section>
 
       <section className="section">
-        <h2>Final</h2>
-        <p className={`total ${finalTotal >= 0 ? 'positive' : 'negative'}`}>
-          Final: {fmt(finalTotal)}
-        </p>
+        <h2>Payment</h2>
+        <label>
+          Phone Pay
+          <div className="input-unit">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={phonePay}
+              onChange={(e) => setPhonePay(e.target.value)}
+              placeholder="0"
+            />
+            <span className="unit">₹</span>
+          </div>
+        </label>
+        <label>
+          Card Pay
+          <div className="input-unit">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={cardPay}
+              onChange={(e) => setCardPay(e.target.value)}
+              placeholder="0"
+            />
+            <span className="unit">₹</span>
+          </div>
+        </label>
+        <p className="total">Total payments: {fmt(totalPayments)}</p>
+        <p className="total">Final balance: {fmt(finalBalance)}</p>
       </section>
 
       <section className="section section-wide">
@@ -456,6 +454,22 @@ function App({ signOut, user }) {
           </div>
         </div>
         <p className="total">Total cash: {fmt(totalCash)}</p>
+      </section>
+
+      <section className="section">
+        <h2>Final</h2>
+        <p className={`total ${finalTotal < 0 ? 'negative' : 'positive'}`}>
+          Final: {fmt(finalTotal)}
+        </p>
+        <label className="comment-label">
+          Comment
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Add a note for today's report"
+            rows={3}
+          />
+        </label>
       </section>
 
       </div>
