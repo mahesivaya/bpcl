@@ -92,25 +92,21 @@ function App({ signOut, user }) {
     doc.setFontSize(16)
     doc.text(`Daily Report - ${date}`, 14, 16)
 
-    let y = 24
+    let y = 22
     const section = (title, rows) => {
-      if (y > 260) {
-        doc.addPage()
-        y = 20
-      }
-      doc.setFontSize(11)
+      doc.setFontSize(9.5)
       doc.setFont(undefined, 'bold')
       doc.text(title, 14, y)
       doc.setFont(undefined, 'normal')
       autoTable(doc, {
-        startY: y + 2,
+        startY: y + 1,
         body: rows,
         theme: 'grid',
-        styles: { fontSize: 9, cellPadding: 2 },
+        styles: { fontSize: 8, cellPadding: 1.2 },
         columnStyles: { 0: { cellWidth: 90 }, 1: { cellWidth: 60 } },
         margin: { left: 14 },
       })
-      y = doc.lastAutoTable.finalY + 8
+      y = doc.lastAutoTable.finalY + 4
     }
 
     section('HSD', [
@@ -172,17 +168,13 @@ function App({ signOut, user }) {
     section('Final Result', [['Final', fmt(finalTotal)]])
 
     if (comment.trim()) {
-      if (y > 260) {
-        doc.addPage()
-        y = 20
-      }
-      doc.setFontSize(11)
+      doc.setFontSize(9.5)
       doc.setFont(undefined, 'bold')
       doc.text('Comment', 14, y)
       doc.setFont(undefined, 'normal')
-      doc.setFontSize(10)
+      doc.setFontSize(9)
       const lines = doc.splitTextToSize(comment, 180)
-      doc.text(lines, 14, y + 6)
+      doc.text(lines, 14, y + 5)
     }
 
     doc.save(`daily-report-${date}.pdf`)
