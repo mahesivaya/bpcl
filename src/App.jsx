@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { jsPDF } from 'jspdf'
+import autoTable from 'jspdf-autotable'
 import AddUser from './AddUser.jsx'
 import ReportDownload from './ReportDownload.jsx'
 import { client } from './amplifyClient.js'
@@ -84,6 +86,108 @@ function App({ signOut, user }) {
 
   const finalTotal = finalBalance - totalCash
 
+  const downloadReportPDF = () => {
+    const date = todayISO()
+    const doc = new jsPDF()
+    doc.setFontSize(16)
+    doc.text(`Daily Report - ${date}`, 14, 16)
+
+    let y = 24
+    const section = (title, rows) => {
+      if (y > 260) {
+        doc.addPage()
+        y = 20
+      }
+      doc.setFontSize(11)
+      doc.setFont(undefined, 'bold')
+      doc.text(title, 14, y)
+      doc.setFont(undefined, 'normal')
+      autoTable(doc, {
+        startY: y + 2,
+        body: rows,
+        theme: 'grid',
+        styles: { fontSize: 9, cellPadding: 2 },
+        columnStyles: { 0: { cellWidth: 90 }, 1: { cellWidth: 60 } },
+        margin: { left: 14 },
+      })
+      y = doc.lastAutoTable.finalY + 8
+    }
+
+    section('HSD', [
+      [
+        'Nozzle 1: X - Y',
+        `${fmt(toNumber(hsdNozzle1Closing))} - ${fmt(toNumber(hsdNozzle1Opening))} = ${fmt(hsdAmount1)}`,
+      ],
+      [
+        'Nozzle 2: X - Y',
+        `${fmt(toNumber(hsdNozzle2Closing))} - ${fmt(toNumber(hsdNozzle2Opening))} = ${fmt(hsdAmount2)}`,
+      ],
+      ['HSD Total', fmt(totalHSD)],
+    ])
+
+    section('MS', [
+      [
+        'Nozzle 1: X - Y',
+        `${fmt(toNumber(msNozzle1Closing))} - ${fmt(toNumber(msNozzle1Opening))} = ${fmt(msAmount1)}`,
+      ],
+      [
+        'Nozzle 2: X - Y',
+        `${fmt(toNumber(msNozzle2Closing))} - ${fmt(toNumber(msNozzle2Opening))} = ${fmt(msAmount2)}`,
+      ],
+      ['MS Total', fmt(totalMS)],
+    ])
+
+    section('Final Collection', [
+      ['HSD Rate', fmt(toNumber(hsdRate))],
+      ['HSD Amount', fmt(hsdFinalAmount)],
+      ['MS Rate', fmt(toNumber(msRate))],
+      ['MS Amount', fmt(msFinalAmount)],
+      ['Final HSD+MS', fmt(totalCollection)],
+    ])
+
+    section('2TT', [
+      ['2TT Price', fmt(toNumber(ttPrice))],
+      ['2TT Sold', fmt(toNumber(ttSold))],
+      ['2TT Amount', fmt(ttAmount)],
+    ])
+
+    section('Payment', [
+      ['Phone Pay', fmt(toNumber(phonePay))],
+      ['Card Pay', fmt(toNumber(cardPay))],
+      ['Total Payments', fmt(totalPayments)],
+      ['Final Balance', fmt(finalBalance)],
+    ])
+
+    section('Denomination', [
+      [`500 x ${fmt(toNumber(note500))}`, fmt(value500)],
+      [`200 x ${fmt(toNumber(note200))}`, fmt(value200)],
+      [`100 x ${fmt(toNumber(note100))}`, fmt(value100)],
+      [`50 x ${fmt(toNumber(note50))}`, fmt(value50)],
+      [`20 x ${fmt(toNumber(note20))}`, fmt(value20)],
+      [`10 x ${fmt(toNumber(note10))}`, fmt(value10)],
+      ['Coins', fmt(valueCoins)],
+      ['Total Cash', fmt(totalCash)],
+    ])
+
+    section('Final Result', [['Final', fmt(finalTotal)]])
+
+    if (comment.trim()) {
+      if (y > 260) {
+        doc.addPage()
+        y = 20
+      }
+      doc.setFontSize(11)
+      doc.setFont(undefined, 'bold')
+      doc.text('Comment', 14, y)
+      doc.setFont(undefined, 'normal')
+      doc.setFontSize(10)
+      const lines = doc.splitTextToSize(comment, 180)
+      doc.text(lines, 14, y + 6)
+    }
+
+    doc.save(`daily-report-${date}.pdf`)
+  }
+
   const handleSave = async () => {
     setSaveStatus('saving')
     const date = todayISO()
@@ -124,6 +228,7 @@ function App({ signOut, user }) {
         return
       }
       setSaveStatus('saved')
+      downloadReportPDF()
     } catch {
       setSaveStatus('error')
     }
