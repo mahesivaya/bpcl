@@ -43,7 +43,10 @@ function App({ signOut, user }) {
   const [msRate, setMsRate] = useState('')
 
   const [phonePay, setPhonePay] = useState('')
+  const [afterPhonePay, setAfterPhonePay] = useState('')
   const [cardPay, setCardPay] = useState('')
+  const [maintenance, setMaintenance] = useState('')
+  const [other, setOther] = useState('')
 
   const [ttPrice, setTtPrice] = useState('')
   const [ttSold, setTtSold] = useState('')
@@ -69,7 +72,12 @@ function App({ signOut, user }) {
   const hsdFinalAmount = Math.abs(totalHSD) * toNumber(hsdRate)
   const msFinalAmount = Math.abs(totalMS) * toNumber(msRate)
   const totalCollection = hsdFinalAmount + msFinalAmount
-  const totalPayments = toNumber(phonePay) + toNumber(cardPay)
+  const totalPayments =
+    toNumber(phonePay) +
+    toNumber(afterPhonePay) +
+    toNumber(cardPay) +
+    toNumber(maintenance) +
+    toNumber(other)
   const ttAmount = toNumber(ttPrice) * toNumber(ttSold)
   const finalBalance = totalCollection + ttAmount - totalPayments
 
@@ -103,7 +111,10 @@ function App({ signOut, user }) {
       hsdRate: toNumber(hsdRate),
       msRate: toNumber(msRate),
       phonePay: toNumber(phonePay),
+      afterPhonePay: toNumber(afterPhonePay),
       cardPay: toNumber(cardPay),
+      maintenance: toNumber(maintenance),
+      other: toNumber(other),
       ttPrice: toNumber(ttPrice),
       ttSold: toNumber(ttSold),
       note500: toNumber(note500),
@@ -343,6 +354,19 @@ function App({ signOut, user }) {
           </div>
         </label>
         <label>
+          <span className="denom-label">After Phone Pay</span>
+          <div className="input-unit">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={afterPhonePay}
+              onChange={(e) => setAfterPhonePay(e.target.value)}
+              placeholder="0"
+            />
+            <span className="unit">₹</span>
+          </div>
+        </label>
+        <label>
           <span className="denom-label">Card Pay</span>
           <div className="input-unit">
             <input
@@ -350,6 +374,32 @@ function App({ signOut, user }) {
               inputMode="decimal"
               value={cardPay}
               onChange={(e) => setCardPay(e.target.value)}
+              placeholder="0"
+            />
+            <span className="unit">₹</span>
+          </div>
+        </label>
+        <label>
+          <span className="denom-label">Maintenance</span>
+          <div className="input-unit">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={maintenance}
+              onChange={(e) => setMaintenance(e.target.value)}
+              placeholder="0"
+            />
+            <span className="unit">₹</span>
+          </div>
+        </label>
+        <label>
+          <span className="denom-label">Other</span>
+          <div className="input-unit">
+            <input
+              type="text"
+              inputMode="decimal"
+              value={other}
+              onChange={(e) => setOther(e.target.value)}
               placeholder="0"
             />
             <span className="unit">₹</span>

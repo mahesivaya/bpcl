@@ -277,13 +277,17 @@ textarea {
   gap: 0.35rem;
 }
 
+.denom-row .denom-label {
+  width: 3.5rem;
+}
+
 .section label:has(> .denom-label) {
   gap: 0.35rem;
 }
 
 .denom-label {
   display: inline-block;
-  width: 5.5rem;
+  width: 7rem;
   flex-shrink: 0;
   text-align: left;
 }

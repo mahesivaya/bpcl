@@ -23,7 +23,12 @@ export const buildDailyReportPDF = (record) => {
   const hsdFinalAmount = Math.abs(totalHSD) * n(record.hsdRate)
   const msFinalAmount = Math.abs(totalMS) * n(record.msRate)
   const totalCollection = hsdFinalAmount + msFinalAmount
-  const totalPayments = n(record.phonePay) + n(record.cardPay)
+  const totalPayments =
+    n(record.phonePay) +
+    n(record.afterPhonePay) +
+    n(record.cardPay) +
+    n(record.maintenance) +
+    n(record.other)
   const ttAmount = n(record.ttPrice) * n(record.ttSold)
   const finalBalance = totalCollection + ttAmount - totalPayments
 
@@ -101,7 +106,10 @@ export const buildDailyReportPDF = (record) => {
 
   section('Payment', [
     ['Phone Pay', fmt(n(record.phonePay))],
+    ['After Phone Pay', fmt(n(record.afterPhonePay))],
     ['Card Pay', fmt(n(record.cardPay))],
+    ['Maintenance', fmt(n(record.maintenance))],
+    ['Other', fmt(n(record.other))],
     ['Online Payments', fmt(totalPayments)],
   ])
 
