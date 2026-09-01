@@ -270,7 +270,7 @@ function App({ signOut, user }) {
       <section className="section">
         <h2>Final Collection</h2>
         <label>
-          HSD
+          <span className="denom-label">HSD</span>
           <div className="input-unit">
             <input
               type="text"
@@ -284,7 +284,7 @@ function App({ signOut, user }) {
         </label>
         <p className="total">HSD Amount: {fmt(hsdFinalAmount)}</p>
         <label>
-          MS
+          <span className="denom-label">MS</span>
           <div className="input-unit">
             <input
               type="text"
@@ -303,7 +303,7 @@ function App({ signOut, user }) {
       <section className="section">
         <h2>2TT</h2>
         <label>
-          2TT price
+          <span className="denom-label">2TT price</span>
           <div className="input-unit">
             <input
               type="text"
@@ -316,7 +316,7 @@ function App({ signOut, user }) {
           </div>
         </label>
         <label>
-          2TT sold
+          <span className="denom-label">2TT sold</span>
           <input
             type="text"
             inputMode="decimal"
@@ -331,7 +331,7 @@ function App({ signOut, user }) {
       <section className="section">
         <h2>Payment</h2>
         <label>
-          Phone Pay
+          <span className="denom-label">Phone Pay</span>
           <div className="input-unit">
             <input
               type="text"
@@ -344,7 +344,7 @@ function App({ signOut, user }) {
           </div>
         </label>
         <label>
-          Card Pay
+          <span className="denom-label">Card Pay</span>
           <div className="input-unit">
             <input
               type="text"
@@ -365,7 +365,7 @@ function App({ signOut, user }) {
         <div className="denom-grid">
           <div className="denom-row">
             <label>
-              500 x
+              <span className="denom-label">500 x</span>
               <input
                 type="text"
                 inputMode="decimal"
@@ -378,7 +378,7 @@ function App({ signOut, user }) {
           </div>
           <div className="denom-row">
             <label>
-              200 x
+              <span className="denom-label">200 x</span>
               <input
                 type="text"
                 inputMode="decimal"
@@ -391,7 +391,7 @@ function App({ signOut, user }) {
           </div>
           <div className="denom-row">
             <label>
-              100 x
+              <span className="denom-label">100 x</span>
               <input
                 type="text"
                 inputMode="decimal"
@@ -404,7 +404,7 @@ function App({ signOut, user }) {
           </div>
           <div className="denom-row">
             <label>
-              50 x
+              <span className="denom-label">50 x</span>
               <input
                 type="text"
                 inputMode="decimal"
@@ -417,7 +417,7 @@ function App({ signOut, user }) {
           </div>
           <div className="denom-row">
             <label>
-              20 x
+              <span className="denom-label">20 x</span>
               <input
                 type="text"
                 inputMode="decimal"
@@ -430,7 +430,7 @@ function App({ signOut, user }) {
           </div>
           <div className="denom-row">
             <label>
-              10 x
+              <span className="denom-label">10 x</span>
               <input
                 type="text"
                 inputMode="decimal"
@@ -443,7 +443,7 @@ function App({ signOut, user }) {
           </div>
           <div className="denom-row">
             <label>
-              Coins
+              <span className="denom-label">Coins</span>
               <input
                 type="text"
                 inputMode="decimal"
