@@ -8,7 +8,10 @@ const toNumber = (value) => {
   return Number.isNaN(num) ? 0 : num
 }
 
-const trunc2 = (num) => Math.trunc(num * 100) / 100
+const trunc2 = (num) => {
+  const sign = num < 0 ? -1 : 1
+  return (sign * Math.trunc(Math.abs(num) * 100 + 1e-9)) / 100
+}
 
 const fmt = (num) => {
   if (num === 0) return '0'
