@@ -144,7 +144,6 @@ function App({ signOut, user }) {
   return (
     <div className="container">
       <header className="page-header">
-        <h1>G.N.Rao BPCL</h1>
         <div className="header-top">
           <div className="header-left">
             <ReportDownload />
@@ -152,6 +151,7 @@ function App({ signOut, user }) {
               {dateStr} &middot; {timeStr}
             </p>
           </div>
+          <h1 className="header-title">G.N.Rao BPCL</h1>
           <div className="header-account">
             <span>{user?.signInDetails?.loginId}</span>
             <AddUser />
@@ -477,7 +477,7 @@ function App({ signOut, user }) {
 
       </div>
 
-      <div className="save-actions">
+      <div className="save-row">
         <button
           type="button"
           className="save-btn"
@@ -491,6 +491,8 @@ function App({ signOut, user }) {
           <p className="save-status error">Could not save. Please try again.</p>
         )}
       </div>
+
+      <div className="save-actions" />
     </div>
   )
 }
