@@ -211,7 +211,7 @@ function App({ signOut, user }) {
           </label>
         </div>
         <p className="total">Meter2 Sale: {fmt(Math.abs(hsdAmount2))}</p>
-        <p className="total total-divider">Total Diesel: {fmt(totalHSD)}</p>
+        <p className="total total-divider">Total diesel sale: {fmt(totalHSD)}</p>
       </section>
 
       <section className="section">
@@ -262,7 +262,7 @@ function App({ signOut, user }) {
           </label>
         </div>
         <p className="total">Meter2 Sale: {fmt(Math.abs(msAmount2))}</p>
-        <p className="total total-divider">Total Petrol: {fmt(totalMS)}</p>
+        <p className="total total-divider">Total petrol sale: {fmt(totalMS)}</p>
       </section>
 
       <section className="section">
