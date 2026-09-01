@@ -187,7 +187,7 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Meter1 volume: {fmt(hsdAmount1)}</p>
+        <p className="total">Meter1 Sale: {fmt(Math.abs(hsdAmount1))}</p>
         <div className="xy-row">
           <label>
             Start
@@ -210,7 +210,7 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Meter2 volume: {fmt(hsdAmount2)}</p>
+        <p className="total">Meter2 Sale: {fmt(Math.abs(hsdAmount2))}</p>
         <p className="total total-divider">Total Diesel: {fmt(totalHSD)}</p>
       </section>
 
@@ -238,7 +238,7 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Meter1 volume: {fmt(msAmount1)}</p>
+        <p className="total">Meter1 Sale: {fmt(Math.abs(msAmount1))}</p>
         <div className="xy-row">
           <label>
             Start
@@ -261,7 +261,7 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Meter2 volume: {fmt(msAmount2)}</p>
+        <p className="total">Meter2 Sale: {fmt(Math.abs(msAmount2))}</p>
         <p className="total total-divider">Total Petrol: {fmt(totalMS)}</p>
       </section>
 
