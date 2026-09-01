@@ -24,8 +24,8 @@ export const buildDailyReportPDF = (record) => {
   const msFinalAmount = Math.abs(totalMS) * n(record.msRate)
   const totalCollection = hsdFinalAmount + msFinalAmount
   const totalPayments = n(record.phonePay) + n(record.cardPay)
-  const finalBalance = totalCollection - totalPayments
   const ttAmount = n(record.ttPrice) * n(record.ttSold)
+  const finalBalance = totalCollection + ttAmount - totalPayments
 
   const value500 = 500 * n(record.note500)
   const value200 = 200 * n(record.note200)

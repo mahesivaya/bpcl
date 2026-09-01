@@ -70,8 +70,8 @@ function App({ signOut, user }) {
   const msFinalAmount = Math.abs(totalMS) * toNumber(msRate)
   const totalCollection = hsdFinalAmount + msFinalAmount
   const totalPayments = toNumber(phonePay) + toNumber(cardPay)
-  const finalBalance = totalCollection - totalPayments
   const ttAmount = toNumber(ttPrice) * toNumber(ttSold)
+  const finalBalance = totalCollection + ttAmount - totalPayments
 
   const value500 = 500 * toNumber(note500)
   const value200 = 200 * toNumber(note200)
