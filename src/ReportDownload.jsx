@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { client } from './amplifyClient.js'
+import { buildDailyReportPDF } from './reportPdf.js'
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -149,8 +150,13 @@ function ReportDownload() {
     setDownloading(true)
     try {
       if (mode === 'single') {
-        const row = await fetchRowForDate(single.year, single.monthIndex, single.day)
-        downloadPDF(`daily-report-${row.date}.pdf`, `Daily Report - ${row.date}`, [row], false)
+        const date = formatDate(single.year, single.monthIndex, single.day)
+        const { data: record } = await client.models.DailyReport.get({ date })
+        if (!record) {
+          window.alert(`No saved report found for ${date}.`)
+          return
+        }
+        buildDailyReportPDF(record)
         return
       }
 
