@@ -157,13 +157,13 @@ h1 {
 }
 
 .section h2 {
-  margin: 0;
+  margin: -0.5rem -0.5rem 0;
+  padding: 0.5rem;
   font-size: 1.05rem;
   text-align: center;
-  text-decoration: underline;
-  text-decoration-color: #2563eb;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 2px;
+  background: #2563eb;
+  color: white;
+  border-radius: 9px 9px 0 0;
 }
 
 .section-header {
@@ -311,9 +311,26 @@ textarea {
 
 .total {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #2563eb;
+}
+
+.total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.total-right {
+  text-align: right;
+}
+
+.highlight {
+  padding: 0.4rem 0.5rem;
+  background: #facc15;
+  border-radius: 6px;
 }
 
 .total-divider {

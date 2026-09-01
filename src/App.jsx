@@ -83,6 +83,8 @@ function App({ signOut, user }) {
   const totalCash =
     value500 + value200 + value100 + value50 + value20 + value10 + valueCoins
 
+  const totalAmountReceived = totalPayments + totalCash
+
   const finalTotal = finalBalance - totalCash
 
   const handleSave = async () => {
@@ -185,7 +187,7 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Volume: {fmt(hsdAmount1)}</p>
+        <p className="total">Meter1 volume: {fmt(hsdAmount1)}</p>
         <div className="xy-row">
           <label>
             Start
@@ -208,7 +210,7 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Volume: {fmt(hsdAmount2)}</p>
+        <p className="total">Meter2 volume: {fmt(hsdAmount2)}</p>
         <p className="total total-divider">Total Diesel: {fmt(totalHSD)}</p>
       </section>
 
@@ -236,7 +238,7 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Volume: {fmt(msAmount1)}</p>
+        <p className="total">Meter1 volume: {fmt(msAmount1)}</p>
         <div className="xy-row">
           <label>
             Start
@@ -259,7 +261,7 @@ function App({ signOut, user }) {
             />
           </label>
         </div>
-        <p className="total">Volume: {fmt(msAmount2)}</p>
+        <p className="total">Meter2 volume: {fmt(msAmount2)}</p>
         <p className="total total-divider">Total Petrol: {fmt(totalMS)}</p>
       </section>
 
@@ -322,11 +324,11 @@ function App({ signOut, user }) {
           />
         </label>
         <p className="total total-divider">2TT Amount: {fmt(ttAmount)}</p>
-        <p className="total total-divider">Final balance: {fmt(finalBalance)}</p>
+        <p className="total total-divider highlight">Sale amount: {fmt(finalBalance)}</p>
       </section>
 
       <section className="section">
-        <h2>Payment</h2>
+        <h2>Online payment</h2>
         <label>
           <span className="denom-label">Phone Pay</span>
           <div className="input-unit">
@@ -451,13 +453,16 @@ function App({ signOut, user }) {
             <span className="denom-value">= {fmt(valueCoins)}</span>
           </div>
         </div>
-        <p className="total">Total cash: {fmt(totalCash)}</p>
+        <div className="total-row">
+          <p className="total">Total cash: {fmt(totalCash)}</p>
+          <p className="total total-right highlight">Total Amount received: {fmt(totalAmountReceived)}</p>
+        </div>
       </section>
 
       <section className="section">
-        <h2>Final</h2>
+        <h2>Final Amount</h2>
         <p className={`total ${finalTotal < 0 ? 'negative' : 'positive'}`}>
-          Final: {fmt(finalTotal)}
+          Final Amount: {fmt(finalTotal)}
         </p>
         <label className="comment-label">
           Comment
