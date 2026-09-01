@@ -218,6 +218,7 @@ input {
 .section label input,
 .section label .input-unit {
   flex: 0 1 110px;
+  width: 110px;
   min-width: 0;
 }
 
