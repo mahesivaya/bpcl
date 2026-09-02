@@ -53,6 +53,17 @@ body {
   text-align: left;
 }
 
+.header-menu {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
 .header-account {
   display: flex;
   align-items: center;
@@ -128,6 +139,21 @@ h1 {
   margin: 0;
   color: #6b7280;
   font-size: 0.9rem;
+}
+
+.form-date-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.form-date {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
 }
 
 .form-grid {
@@ -359,12 +385,10 @@ textarea {
 .calendar-wrap {
   position: relative;
   margin: 0;
-  width: 260px;
-  max-width: 60vw;
 }
 
 .calendar-btn {
-  width: 100%;
+  white-space: nowrap;
   padding: 0.6rem 1rem;
   font-size: 0.95rem;
   font-weight: 600;
@@ -380,6 +404,8 @@ textarea {
 }
 
 .calendar-panel {
+  width: 260px;
+  max-width: 70vw;
   margin-top: 0.6rem;
   padding: 1rem;
   border: 1px solid #e5e7eb;
@@ -391,9 +417,31 @@ textarea {
   gap: 0.75rem;
 }
 
-.mode-toggle {
+.mode-toggle,
+.view-toggle {
   display: flex;
   gap: 0.5rem;
+}
+
+.view-toggle button {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f9fafb;
+  color: #111827;
+  cursor: pointer;
+}
+
+.view-toggle button:hover {
+  background: #f3f4f6;
+}
+
+.view-toggle button.active {
+  background: #facc15;
+  border-color: #facc15;
+  color: #111827;
 }
 
 .mode-toggle button {
@@ -412,6 +460,12 @@ textarea {
   background: #2563eb;
   border-color: #2563eb;
   color: white;
+}
+
+.mode-toggle button:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
 .range-label {
@@ -454,6 +508,44 @@ textarea {
 .download-btn:disabled {
   background: #86efac;
   cursor: not-allowed;
+}
+
+.edit-btn {
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: #1d4ed8;
+}
+
+.edit-btn:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.edit-btn.active {
+  background: #facc15;
+  color: #111827;
+  box-shadow: 0 0 0 2px #b45309;
+}
+
+.edit-status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.edit-enabled-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #16a34a;
 }
 
 .save-row {
@@ -503,6 +595,48 @@ textarea {
 
 .save-status.error {
   color: #b91c1c;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.dashboard-chart {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1rem;
+  background: #fafafa;
+}
+
+.dashboard-chart h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.dashboard-status {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.dashboard-month-picker {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.dashboard-month-picker select {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #111827;
 }
 
 @media (max-width: 1100px) {

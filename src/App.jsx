@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import AddUser from './AddUser.jsx'
 import ReportDownload from './ReportDownload.jsx'
+import AddEditForm from './AddEditForm.jsx'
+import Dashboard from './Dashboard.jsx'
 import { client } from './amplifyClient.js'
 import { buildDailyReportPDF } from './reportPdf.js'
 
@@ -26,8 +28,12 @@ const todayISO = () => {
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`
 }
 
+const strOrEmpty = (value) => (value === null || value === undefined ? '' : String(value))
+
 function App({ signOut, user }) {
-  const [now] = useState(new Date())
+  const [view, setView] = useState('form')
+  const [editingDate, setEditingDate] = useState(todayISO())
+  const [editEnabled, setEditEnabled] = useState(false)
 
   const [hsdNozzle1Closing, setHsdNozzle1Closing] = useState('')
   const [hsdNozzle1Opening, setHsdNozzle1Opening] = useState('')
@@ -95,9 +101,58 @@ function App({ signOut, user }) {
 
   const finalTotal = finalBalance - totalCash
 
+  const handleLoadRecord = (record) => {
+    setEditEnabled(false)
+    setEditingDate(record.date)
+    setHsdNozzle1Closing(strOrEmpty(record.hsdNozzle1Closing))
+    setHsdNozzle1Opening(strOrEmpty(record.hsdNozzle1Opening))
+    setHsdNozzle2Closing(strOrEmpty(record.hsdNozzle2Closing))
+    setHsdNozzle2Opening(strOrEmpty(record.hsdNozzle2Opening))
+    setMsNozzle1Closing(strOrEmpty(record.msNozzle1Closing))
+    setMsNozzle1Opening(strOrEmpty(record.msNozzle1Opening))
+    setMsNozzle2Closing(strOrEmpty(record.msNozzle2Closing))
+    setMsNozzle2Opening(strOrEmpty(record.msNozzle2Opening))
+    setHsdRate(strOrEmpty(record.hsdRate))
+    setMsRate(strOrEmpty(record.msRate))
+    setPhonePay(strOrEmpty(record.phonePay))
+    setAfterPhonePay(strOrEmpty(record.afterPhonePay))
+    setCardPay(strOrEmpty(record.cardPay))
+    setMaintenance(strOrEmpty(record.maintenance))
+    setOther(strOrEmpty(record.other))
+    setTtPrice(strOrEmpty(record.ttPrice))
+    setTtSold(strOrEmpty(record.ttSold))
+    setNote500(strOrEmpty(record.note500))
+    setNote200(strOrEmpty(record.note200))
+    setNote100(strOrEmpty(record.note100))
+    setNote50(strOrEmpty(record.note50))
+    setNote20(strOrEmpty(record.note20))
+    setNote10(strOrEmpty(record.note10))
+    setCoins(strOrEmpty(record.coins))
+    setComment(record.comment || '')
+    setSaveStatus('idle')
+    setView('form')
+  }
+
+  const handleEditClick = async () => {
+    const { data: record } = await client.models.DailyReport.get({ date: editingDate })
+    if (!record) {
+      window.alert(`No saved report found for ${editingDate}.`)
+      return
+    }
+    handleLoadRecord(record)
+    setEditEnabled(true)
+  }
+
   const handleSave = async () => {
+    if (editingDate !== todayISO()) {
+      const confirmed = window.confirm(
+        `This will save the report for ${editingDate}. Continue?`,
+      )
+      if (!confirmed) return
+    }
+
     setSaveStatus('saving')
-    const date = todayISO()
+    const date = editingDate
     const record = {
       date,
       hsdNozzle1Closing: toNumber(hsdNozzle1Closing),
@@ -144,24 +199,11 @@ function App({ signOut, user }) {
     }
   }
 
-  const dateStr = now.toLocaleDateString(undefined, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-  const timeStr = now.toLocaleTimeString()
-
   return (
     <div className="container">
       <header className="page-header">
         <div className="header-top">
-          <div className="header-left">
-            <ReportDownload />
-            <p className="datetime">
-              {dateStr} &middot; {timeStr}
-            </p>
-          </div>
+          <div className="header-left" />
           <h1 className="header-title">G.N.Rao BPCL</h1>
           <div className="header-account">
             <span>{user?.signInDetails?.loginId}</span>
@@ -171,8 +213,45 @@ function App({ signOut, user }) {
             </button>
           </div>
         </div>
+        <nav className="header-menu">
+          <AddEditForm onLoad={handleLoadRecord} />
+          <ReportDownload />
+          <div className="view-toggle">
+            <button
+              type="button"
+              className={view === 'dashboard' ? 'active' : ''}
+              onClick={() => setView('dashboard')}
+            >
+              📊 Layout
+            </button>
+            <button
+              type="button"
+              className={view === 'form' ? 'active' : ''}
+              onClick={() => setView('form')}
+            >
+              📝 Form
+            </button>
+          </div>
+        </nav>
       </header>
 
+      {view === 'dashboard' ? (
+        <Dashboard />
+      ) : (
+      <>
+      <div className="form-date-row">
+        <p className="form-date">Report date: {editingDate}</p>
+        <div className="edit-status">
+          {editEnabled && <span className="edit-enabled-label">✓ Edit enabled</span>}
+          <button
+            type="button"
+            className={`edit-btn${editEnabled ? ' active' : ''}`}
+            onClick={handleEditClick}
+          >
+            ✏ Edit
+          </button>
+        </div>
+      </div>
       <div className="form-grid">
       <section className="section">
         <h2>Diesel Meter</h2>
@@ -543,6 +622,8 @@ function App({ signOut, user }) {
       </div>
 
       <div className="save-actions" />
+      </>
+      )}
     </div>
   )
 }

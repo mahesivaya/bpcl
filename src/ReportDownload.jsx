@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { client } from './amplifyClient.js'
@@ -128,6 +128,20 @@ function ReportDownload() {
   const [open, setOpen] = useState(false)
   const [mode, setMode] = useState('single')
   const [downloading, setDownloading] = useState(false)
+  const wrapRef = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+
+    const handleClickOutside = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [open])
 
   const today = new Date()
   const [single, setSingle] = useState({
@@ -190,13 +204,13 @@ function ReportDownload() {
   }
 
   return (
-    <div className="calendar-wrap">
+    <div className="calendar-wrap" ref={wrapRef}>
       <button
         type="button"
         className="calendar-btn"
         onClick={() => setOpen((o) => !o)}
       >
-        📅 Calendar
+        📅 Past Reports
       </button>
 
       {open && (
@@ -207,12 +221,14 @@ function ReportDownload() {
               className={mode === 'single' ? 'active' : ''}
               onClick={() => setMode('single')}
             >
-              Single Day
+              Day
             </button>
             <button
               type="button"
               className={mode === 'range' ? 'active' : ''}
               onClick={() => setMode('range')}
+              disabled
+              title="Range download is temporarily disabled"
             >
               Range
             </button>
